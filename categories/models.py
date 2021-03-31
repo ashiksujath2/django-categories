@@ -12,6 +12,8 @@ from django.core.files.storage import get_storage_class
 
 from django.utils.translation import ugettext_lazy as _
 
+from slugify import slugify
+
 from .settings import (RELATION_MODELS, RELATIONS, THUMBNAIL_UPLOAD_PATH, THUMBNAIL_STORAGE)
 
 from .base import CategoryBase
@@ -79,6 +81,9 @@ class Category(CategoryBase):
             Get all relations of the specified relation type
             """
             return self.categoryrelation_set.filter(relation_type=relation_type)
+
+    def generate_slug(self):
+        return slugify(self.alternate_title)[:50]
 
     def save(self, *args, **kwargs):
         if self.thumbnail:

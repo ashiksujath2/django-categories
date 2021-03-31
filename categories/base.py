@@ -59,6 +59,9 @@ class CategoryBase(MPTTModel):
     objects = CategoryManager()
     tree = TreeManager()
 
+    def generate_slug(self):
+        return slugify(SLUG_TRANSLITERATOR(self.name))[:50]
+
     def save(self, *args, **kwargs):
         """
         While you can activate an item without activating its descendants,
@@ -66,7 +69,7 @@ class CategoryBase(MPTTModel):
         decendants remain active.
         """
         if not self.slug:
-            self.slug = slugify(SLUG_TRANSLITERATOR(self.name))[:50]
+            self.slug = self.generate_slug()
 
         super(CategoryBase, self).save(*args, **kwargs)
 
