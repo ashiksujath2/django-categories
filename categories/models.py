@@ -30,8 +30,6 @@ class Category(CategoryBase):
     thumbnail_height = models.IntegerField(blank=True, null=True)
     order = models.IntegerField(default=0)
     alternate_title = models.CharField(
-        blank=True,
-        default="",
         max_length=100,
         help_text="An alternative title to use on pages with this category.")
     alternate_url = models.CharField(
