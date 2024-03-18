@@ -5,7 +5,7 @@ from django.db.models import ForeignKey, ManyToManyField, CASCADE
 from django.core.exceptions import FieldDoesNotExist
 from . import fields
 # from settings import self._field_registry, self._model_registry
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ImproperlyConfigured
 
 

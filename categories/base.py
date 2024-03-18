@@ -7,7 +7,7 @@ import sys
 from django.contrib import admin
 from django.db import models
 from django import forms
-from django.utils.encoding import force_text
+from django.utils.encoding import force_str
 
 from mptt.models import MPTTModel
 from mptt.fields import TreeForeignKey
@@ -17,7 +17,7 @@ from slugify import slugify
 from .editor.tree_editor import TreeEditor
 from .settings import ALLOW_SLUG_CHANGE, SLUG_TRANSLITERATOR
 
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 
 if sys.version_info[0] < 3:  # Remove this after dropping support of Python 2
@@ -81,7 +81,7 @@ class CategoryBase(MPTTModel):
 
     def __str__(self):
         ancestors = self.get_ancestors()
-        return ' > '.join([force_text(i.name) for i in ancestors] + [self.name, ])
+        return ' > '.join([force_str(i.name) for i in ancestors] + [self.name, ])
 
     class Meta:
         abstract = True
@@ -153,6 +153,9 @@ class CategoryBaseAdmin(TreeEditor, admin.ModelAdmin):
             del actions['delete_selected']
         return actions
 
+    @admin.action(
+        description=_('Deactivate selected categories and their children')
+    )
     def deactivate(self, request, queryset):
         """
         Set active to False for selected items
@@ -165,8 +168,10 @@ class CategoryBaseAdmin(TreeEditor, admin.ModelAdmin):
                 item.active = False
                 item.save()
                 item.children.all().update(active=False)
-    deactivate.short_description = _('Deactivate selected categories and their children')
 
+    @admin.action(
+        description=_('Activate selected categories and their children')
+    )
     def activate(self, request, queryset):
         """
         Set active to True for selected items
@@ -178,4 +183,3 @@ class CategoryBaseAdmin(TreeEditor, admin.ModelAdmin):
             item.active = True
             item.save()
             item.children.all().update(active=True)
-    activate.short_description = _('Activate selected categories and their children')

@@ -20,4 +20,3 @@ def get_version(short=False):
 __version__ = get_version()
 
 
-default_app_config = 'categories.apps.CategoriesConfig'

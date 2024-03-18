@@ -5,7 +5,7 @@ from django.contrib.admin.templatetags.admin_list import result_headers, _boolea
 from django.contrib.admin.utils import lookup_field
 from categories.editor.utils import display_for_field
 from django.core.exceptions import ObjectDoesNotExist
-from django.utils.encoding import smart_text, force_text
+from django.utils.encoding import smart_str, force_str
 from django.utils.html import escape, conditional_escape, escapejs, format_html
 from django.utils.safestring import mark_safe
 
@@ -50,7 +50,7 @@ def items_for_tree_result(cl, result, form):
                     allow_tags = True
                     result_repr = _boolean_icon(value)
                 else:
-                    result_repr = smart_text(value)
+                    result_repr = smart_str(value)
                 # Strip HTML tags in the resulting text, except if the
                 # function has an "allow_tags" attribute set to True.
                 if not allow_tags:
@@ -77,7 +77,7 @@ def items_for_tree_result(cl, result, form):
                     except (AttributeError, ObjectDoesNotExist):
                         pass
 
-        if force_text(result_repr) == '':
+        if force_str(result_repr) == '':
             result_repr = mark_safe('&nbsp;')
         # If list_display_links not defined, add the link tag to the first field
         if (first and not cl.list_display_links) or field_name in cl.list_display_links:
@@ -94,12 +94,12 @@ def items_for_tree_result(cl, result, form):
             else:
                 attr = pk
             value = result.serializable_value(attr)
-            result_id = repr(force_text(value))[1:]
+            result_id = repr(force_str(value))[1:]
             first = False
             result_id = escapejs(value)
             yield mark_safe(
                 format_html(
-                    smart_text('<{}{}><a href="{}"{}>{}</a></{}>'),
+                    smart_str('<{}{}><a href="{}"{}>{}</a></{}>'),
                     table_tag,
                     row_class,
                     url,
@@ -115,12 +115,12 @@ def items_for_tree_result(cl, result, form):
             # can provide fields on a per request basis
             if form and field_name in form.fields:
                 bf = form[field_name]
-                result_repr = mark_safe(force_text(bf.errors) + force_text(bf))
+                result_repr = mark_safe(force_str(bf.errors) + force_str(bf))
             else:
                 result_repr = conditional_escape(result_repr)
-            yield mark_safe(smart_text('<td%s>%s</td>' % (row_class, result_repr)))
+            yield mark_safe(smart_str('<td%s>%s</td>' % (row_class, result_repr)))
     if form and not form[cl.model._meta.pk.name].is_hidden:
-        yield mark_safe(smart_text('<td>%s</td>' % force_text(form[cl.model._meta.pk.name])))
+        yield mark_safe(smart_str('<td>%s</td>' % force_str(form[cl.model._meta.pk.name])))
 
 
 class TreeList(list):

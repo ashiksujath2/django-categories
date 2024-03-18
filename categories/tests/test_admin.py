@@ -3,7 +3,7 @@
 from django.contrib.auth.models import User
 from django.urls import reverse
 from django.test import Client, TestCase
-from django.utils.encoding import smart_text
+from django.utils.encoding import smart_str
 
 from categories.models import Category
 
@@ -19,7 +19,7 @@ class TestCategoryAdmin(TestCase):
         url = reverse('admin:categories_category_add')
         data = {
             'parent': '',
-            'name': smart_text('Parent Catégory'),
+            'name': smart_str('Parent Catégory'),
             'thumbnail': '',
             'filename': '',
             'active': 'on',
@@ -41,7 +41,7 @@ class TestCategoryAdmin(TestCase):
         self.assertEqual(1, Category.objects.count())
 
         # update parent
-        data.update({'name': smart_text('Parent Catégory (Changed)')})
+        data.update({'name': smart_str('Parent Catégory (Changed)')})
         resp = self.client.post(reverse('admin:categories_category_change', args=(1,)), data=data)
         self.assertEqual(resp.status_code, 302)
         self.assertEqual(1, Category.objects.count())
@@ -49,8 +49,8 @@ class TestCategoryAdmin(TestCase):
         # add a child
         data.update({
             'parent': '1',
-            'name': smart_text('Child Catégory'),
-            'slug': smart_text('child-category'),
+            'name': smart_str('Child Catégory'),
+            'slug': smart_str('child-category'),
         })
         resp = self.client.post(url, data=data)
         self.assertEqual(resp.status_code, 302)

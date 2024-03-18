@@ -4,6 +4,7 @@ from django.contrib import admin
 from categories.admin import CategoryBaseAdmin, CategoryBaseAdminForm
 
 
+@admin.register(SimpleText)
 class SimpleTextAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {
@@ -18,9 +19,8 @@ class SimpleCategoryAdminForm(CategoryBaseAdminForm):
         fields = '__all__'
 
 
+@admin.register(SimpleCategory)
 class SimpleCategoryAdmin(CategoryBaseAdmin):
     form = SimpleCategoryAdminForm
 
 
-admin.site.register(SimpleText, SimpleTextAdmin)
-admin.site.register(SimpleCategory, SimpleCategoryAdmin)
